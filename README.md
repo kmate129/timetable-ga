@@ -35,5 +35,25 @@ Install dependencies:
 
 ```
 cd ${PROJECT_HOME}  # where you've checked out the files
-poetry install
+poetry install --no-root
+```
+
+### Development environment
+
+In case of using VS Code, you have to set up the proper interpreter:
+
+```
+# check interpreter path of virtual env
+poetry env info --path
+```
+
+Settings --> Python: Default Interpreter Path --> paste interpreter path /python3.13
+
+
+## Start
+
+To start project:
+
+```
+poetry run python -m uvicorn main:app --reload
 ```
