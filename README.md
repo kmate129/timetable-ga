@@ -4,15 +4,15 @@
 
 ### Python
 
-Either have Python 3.12 installed globally as default, or use pyenv to install Python 3.12 specifically to the project:
+Either have Python 3.13 installed globally as default, or use pyenv to install Python 3.13 specifically to the project:
 
 ```
 brew install pyenv
 [ -f ~/.zshrc ] && echo 'eval "$(pyenv init -)"' >> ~/.zshrc
 export PATH="$(pyenv root)/shims:$PATH" >> ~/.zshrc
 exec "$SHELL"
-pyenv install 3.12
-pyenv local 3.12
+pyenv install 3.13
+pyenv local 3.13
 ```
 
 ### Dependencies
@@ -20,7 +20,7 @@ pyenv local 3.12
 Manage Python dependencies with poetry.
 
 ```
-# do this after `pyenv local 3.12`
+# do this after `pyenv local 3.13`
 # make sure this installs poetry version 1.8.4 or higher
 pyenv exec pip3 install poetry
 ```
