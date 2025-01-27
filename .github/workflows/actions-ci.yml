@@ -33,7 +33,6 @@ jobs:
         poetry run pytest
 
   lint:
-    name: Lint Code
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
