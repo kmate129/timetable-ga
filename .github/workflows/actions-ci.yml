@@ -18,17 +18,13 @@ jobs:
       with:
         python-version: 3.13
 
-    - name: Install Poetry
+    - name: Install dependencies
       run: |
-        curl -sSL https://install.python-poetry.org | python3 -
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install --no-root
 
-    - name: Configure Poetry
-      run: |
-        poetry config virtualenvs.in-project true
-        poetry install --no-root
-
-    - name: Run Tests
+    - name: Run tests
       run: |
         poetry run pytest
 
@@ -49,6 +45,6 @@ jobs:
           pip install poetry
           poetry install --no-root
 
-      - name: Run pylint
+      - name: Run linter
         run: |
           poetry run pylint $(find . -type f -name "*.py")
