@@ -96,7 +96,6 @@ def test_fetching_classrooms(mock_get):
 
 @patch("requests.get")
 def test_fetching_teachers_api_error(mock_get):
-    # Hiba beállítása (például hálózati hiba)
     mock_get.side_effect = requests.exceptions.RequestException("Connection failed")
 
     teachers = get_teachers()
@@ -106,7 +105,6 @@ def test_fetching_teachers_api_error(mock_get):
 
 @patch("requests.get")
 def test_fetching_teachers_server_error(mock_get):
-    # Szerver hiba beállítása (pl. 500)
     mock_response = MagicMock()
     mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("500 Server Error")
     mock_get.return_value = mock_response
@@ -118,23 +116,20 @@ def test_fetching_teachers_server_error(mock_get):
 
 @patch("requests.get")
 def test_fetching_teachers_invalid_data(mock_get):
-    # Hibás adat beállítása (például a név mező hiányzik)
     mock_response = MagicMock()
     mock_response.json.return_value = [
         {"id": "teacher_1", "name": "Ms. Brown"},
-        {"id": "teacher_2"},  # Hiányzó 'name'
+        {"id": "teacher_2"},
     ]
     mock_response.raise_for_status = MagicMock()
     mock_get.return_value = mock_response
 
-    # Hibát várunk, ha a 'name' hiányzik
     with pytest.raises(ValueError):
         get_teachers()
 
 
 @patch("requests.get")
 def test_fetching_teachers(mock_get):
-    # Mock válasz beállítása
     mock_response = MagicMock()
     mock_response.json.return_value = mock_teachers_data
     mock_response.raise_for_status = MagicMock()
