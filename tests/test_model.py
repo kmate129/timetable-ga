@@ -2,13 +2,14 @@
 
 import pytest
 
-from timetable_ga.models import Classroom, InternalModel
+from timetable_ga.models import Classroom, Course, InternalModel
 
 
 @pytest.fixture(autouse=True)
 def reset_id_counter():
     """Fixture to reset the ID counter before each test."""
     InternalModel.restart_id_counter()
+    Course.restart_id_counter()
 
 
 def test_internal_model_auto_increment_id():
@@ -52,6 +53,49 @@ def test_internal_model_equality_different_id():
     obj1 = InternalModel(backend_id="backend_x")
     obj2 = InternalModel(backend_id="backend_y")
     assert obj1 != obj2
+
+
+def test_course_creation():
+    """Test if Course can be created with a backend ID and name."""
+    course = Course(backend_id="backend_course_1", name="Calculus I.")
+    assert course.id == 0
+    assert course.backend_id == "backend_course_1"
+    assert course.name == "Calculus I."
+
+
+def test_course_get_name():
+    """Test if Course returns the correct name."""
+    course = Course(backend_id="backend_course_2", name="Calculus I.")
+    assert course.get_name() == "Calculus I."
+
+
+def test_course_inherits_internalmodel_methods():
+    """Test if Course inherits methods from InternalModel."""
+    course = Course(backend_id="backend_course_3", name="Chemistry")
+    assert course.get_id() == 0
+    assert course.get_backend_id() == "backend_course_3"
+
+
+def test_multiple_courses_auto_increment_ids():
+    """Test if multiple Course objects auto-increment their IDs."""
+    course1 = Course(backend_id="backend_course_4", name="Calculus I.")
+    course2 = Course(backend_id="backend_course_5", name="Programming I.")
+    assert course1.id == 0
+    assert course2.id == 1
+
+
+def test_course_equality_by_id():
+    """Test if two Course objects with the same ID are equal."""
+    course1 = Course(backend_id="backend_course_6", name="Calculus I.")
+    course2 = Course(id=course1.id, backend_id="backend_course_7", name="Intro to IoT")
+    assert course1 == course2
+
+
+def test_course_inequality_by_id():
+    """Test if two Course objects with different IDs are not equal."""
+    course1 = Course(backend_id="backend_course_8", name="Calculus I.")
+    course2 = Course(backend_id="backend_course_9", name="Intro to IoT")
+    assert course1 != course2
 
 
 def test_classroom_id_reset():
