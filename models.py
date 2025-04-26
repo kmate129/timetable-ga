@@ -1,3 +1,5 @@
+"""Contains the models for the application."""
+
 from typing import ClassVar, List
 
 from pydantic import BaseModel
@@ -10,6 +12,7 @@ class InternalModel(BaseModel):
     _next_id: ClassVar[int] = 0
 
     def __init__(self, **data):
+        """Initialize the model with a unique ID and backend ID."""
         if "id" not in data:
             data["id"] = InternalModel._next_id
             InternalModel._next_id += 1
@@ -29,9 +32,14 @@ class InternalModel(BaseModel):
 
     @classmethod
     def restart_id_counter(cls):
+        """
+        Restart the ID counter for the model."""
         InternalModel._next_id = 0
 
     def __eq__(self, rhs):
+        """
+        Check if two objects are equal based on their IDs.
+        """
         return self.id == rhs.id
 
 
@@ -108,6 +116,9 @@ class CourseClass(InternalModel):
     groups: List[StudentsGroup]
 
     def __init__(self, teacher, course, groups, is_lab_required, duration):
+        """
+        Initialize the course class with a teacher, course, groups, lab requirement, and duration.
+        """
         self.teacher = teacher
         self.course = course
         self.number_of_seats = 0
