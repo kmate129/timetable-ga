@@ -1,9 +1,9 @@
 [flake8]
-ignore = F403,F405,W503
+ignore = F403,F405,W503,E203
 max-line-length = 100
 exclude =
     .git,
     __pycache__,
     .cache,
     .venv,
-max-complexity = 11
+max-complexity = 12

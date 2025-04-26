@@ -1,6 +1,6 @@
 """Utility functions for the application."""
 
-from models import Classroom, Course, CourseClass, StudentsGroup, Teacher
+from timetable_ga.models import Classroom, Course, CourseClass, StudentsGroup, Teacher
 
 
 def restart_id_counters() -> None:

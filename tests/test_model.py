@@ -1,6 +1,6 @@
 """Unit tests for the model classes."""
 
-from models import Classroom
+from timetable_ga.models import Classroom
 
 
 def test_classroom_id_reset():
