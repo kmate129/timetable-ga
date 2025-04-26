@@ -3,8 +3,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 import requests
 
-from timetable_ga.main import get_classrooms, get_teachers
-from timetable_ga.models import Classroom, Teacher
+from timetable_ga.main import get_classrooms, get_courses, get_teachers
+from timetable_ga.models import Classroom, Course, Teacher
 
 mock_classrooms_data = [
     {"id": "ee2e8320-e8d2-41e0-bba0-0de7a1988f36", "name": "Room 1"},
@@ -145,3 +145,52 @@ def test_fetching_teachers(mock_get):
         assert len(teacher.backend_id) > 0
         assert isinstance(teacher.name, str)
         assert len(teacher.name) > 0
+
+
+@patch("requests.get")
+def test_fetching_courses_success(mock_get):
+    mock_response = MagicMock()
+    mock_response.json.return_value = [
+        {"id": "course_1", "name": "Calculus I."},
+        {"id": "course_2", "name": "Programming I."},
+    ]
+    mock_response.raise_for_status = MagicMock()
+    mock_get.return_value = mock_response
+
+    courses = get_courses()
+
+    assert len(courses) == 2
+    assert isinstance(courses[0], Course)
+    assert courses[0].backend_id == "course_1"
+    assert courses[0].name == "Calculus I."
+    assert isinstance(courses[1], Course)
+    assert courses[1].backend_id == "course_2"
+    assert courses[1].name == "Programming I."
+
+
+@patch("requests.get")
+def test_fetching_courses_request_exception(mock_get):
+    mock_response = MagicMock()
+    mock_response.raise_for_status.side_effect = requests.exceptions.RequestException(
+        "Connection failed"
+    )
+    mock_get.return_value = mock_response
+
+    courses = get_courses()
+
+    assert courses == []
+
+
+@patch("requests.get")
+def test_fetching_courses_validation_error(mock_get):
+    mock_response = MagicMock()
+    mock_response.json.return_value = [
+        {"id": "course_1", "name": "Calculus I."},
+        {"id": "course_2"},
+    ]
+    mock_response.raise_for_status = MagicMock()
+    mock_get.return_value = mock_response
+
+    courses = get_courses()
+
+    assert courses == []
