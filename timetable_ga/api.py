@@ -39,16 +39,23 @@ def get_teachers() -> List[Teacher]:
         response.raise_for_status()
 
         data = response.json()
-        teachers = [Teacher(backend_id=item["id"], name=item["name"]) for item in data]
-        return teachers
+        teachers = []
 
-    except ValidationError as e:
-        print(f"Validation error occurred: {e.json()}")
-        return []
+        for item in data:
+            if "name" not in item:
+                raise ValueError(f"Missing 'name' for teacher with id {item['id']}")
+
+            teachers.append(Teacher(backend_id=item["id"], name=item["name"]))
+
+        return teachers
 
     except requests.exceptions.RequestException as e:
         print(f"Request error occurred: {e}")
         return []
+
+    except ValueError as e:
+        print(f"ValueError occurred: {e}")
+        raise
 
 
 def get_courses() -> List[Course]:
