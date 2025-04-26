@@ -2,7 +2,7 @@
 
 import pytest
 
-from timetable_ga.models import Classroom, Course, InternalModel
+from timetable_ga.models import Classroom, Course, InternalModel, Teacher
 
 
 @pytest.fixture(autouse=True)
@@ -10,6 +10,7 @@ def reset_id_counter():
     """Fixture to reset the ID counter before each test."""
     InternalModel.restart_id_counter()
     Course.restart_id_counter()
+    Teacher.restart_id_counter()
 
 
 def test_internal_model_auto_increment_id():
@@ -96,6 +97,53 @@ def test_course_inequality_by_id():
     course1 = Course(backend_id="backend_course_8", name="Calculus I.")
     course2 = Course(backend_id="backend_course_9", name="Intro to IoT")
     assert course1 != course2
+
+
+def test_teacher_creation_defaults():
+    teacher = Teacher(backend_id="backend_teacher_1", name="John Doe")
+    assert teacher.id == 0
+    assert teacher.backend_id == "backend_teacher_1"
+    assert teacher.name == "John Doe"
+    assert teacher.lunch_break_needed is False
+    assert teacher.course_classes == []
+
+
+def test_teacher_get_name():
+    teacher = Teacher(backend_id="backend_teacher_2", name="Jane Smith")
+    assert teacher.get_name() == "Jane Smith"
+
+
+def test_teacher_add_course_class():
+    teacher = Teacher(backend_id="backend_teacher_3", name="Alan Turing")
+    teacher.add_course_class("Calculus I.")
+    teacher.add_course_class("Programming I.")
+    assert teacher.course_classes == ["Calculus I.", "Programming I."]
+
+
+def test_teacher_get_course_classes():
+    teacher = Teacher(backend_id="backend_teacher_4", name="Ada Lovelace")
+    teacher.add_course_class("Programming I.")
+    classes = teacher.get_course_classes()
+    assert classes == ["Programming I."]
+
+
+def test_multiple_teachers_auto_increment_ids():
+    teacher1 = Teacher(backend_id="backend_teacher_5", name="Einstein")
+    teacher2 = Teacher(backend_id="backend_teacher_6", name="Newton")
+    assert teacher1.id == 0
+    assert teacher2.id == 1
+
+
+def test_teacher_equality_by_id():
+    teacher1 = Teacher(backend_id="backend_teacher_7", name="Galileo")
+    teacher2 = Teacher(id=teacher1.id, backend_id="backend_teacher_8", name="Kepler")
+    assert teacher1 == teacher2
+
+
+def test_teacher_inequality_by_id():
+    teacher1 = Teacher(backend_id="backend_teacher_9", name="Feynman")
+    teacher2 = Teacher(backend_id="backend_teacher_10", name="Dirac")
+    assert teacher1 != teacher2
 
 
 def test_classroom_id_reset():
