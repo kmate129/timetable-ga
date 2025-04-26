@@ -12,6 +12,7 @@ def reset_id_counter():
     Course.restart_id_counter()
     Teacher.restart_id_counter()
     StudentsGroup.restart_id_counter()
+    Classroom.restart_id_counter()
 
 
 def test_internal_model_auto_increment_id():
@@ -201,15 +202,54 @@ def test_studentsgroup_inequality_by_id():
     assert group1 != group2
 
 
-def test_classroom_id_reset():
-    """Test if the Classroom ID counter is properly reset."""
-    Classroom.restart_id_counter()
-    classroom = Classroom(backend_id="id_1", name="Room 1")
+def test_classroom_creation_defaults():
+    classroom = Classroom(backend_id="backend_classroom_1", name="Room A")
     assert classroom.id == 0
+    assert classroom.backend_id == "backend_classroom_1"
+    assert classroom.name == "Room A"
+    assert classroom.is_lab is False
+    assert classroom.number_of_seats == 1000
 
-    classroom2 = Classroom(backend_id="id_2", name="Room 2")
+
+def test_classroom_get_name():
+    classroom = Classroom(backend_id="backend_classroom_2", name="Room B")
+    assert classroom.get_name() == "Room B"
+
+
+def test_classroom_get_is_lab_default():
+    classroom = Classroom(backend_id="backend_classroom_3", name="Room C")
+    assert classroom.get_is_lab() is False
+
+
+def test_classroom_get_is_lab_set_true():
+    classroom = Classroom(backend_id="backend_classroom_4", name="Lab 1", is_lab=True)
+    assert classroom.get_is_lab() is True
+
+
+def test_classroom_get_number_of_seats_default():
+    classroom = Classroom(backend_id="backend_classroom_5", name="Room D")
+    assert classroom.get_number_of_seats() == 1000
+
+
+def test_classroom_get_number_of_seats_custom():
+    classroom = Classroom(backend_id="backend_classroom_6", name="Small Room", number_of_seats=30)
+    assert classroom.get_number_of_seats() == 30
+
+
+def test_multiple_classrooms_auto_increment_ids():
+    classroom1 = Classroom(backend_id="backend_classroom_7", name="Room E")
+    classroom2 = Classroom(backend_id="backend_classroom_8", name="Room F")
+    assert classroom1.id == 0
     assert classroom2.id == 1
 
-    Classroom.restart_id_counter()
-    classroom3 = Classroom(backend_id="id_3", name="Room 3")
-    assert classroom3.id == 0
+
+def test_classroom_equality_by_id():
+    classroom1 = Classroom(backend_id="backend_classroom_9", name="Room G")
+    classroom2 = Classroom(id=classroom1.id, backend_id="backend_classroom_10", name="Room H")
+    assert classroom1 == classroom2
+
+
+def test_classroom_inequality_by_id():
+    classroom1 = Classroom(backend_id="backend_classroom_11", name="Room I")
+    classroom2 = Classroom(backend_id="backend_classroom_12", name="Room J")
+    assert classroom1 != classroom2
