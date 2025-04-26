@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 import requests
 
-from timetable_ga.main import get_classrooms, get_courses, get_teachers
+from timetable_ga.main import get_classrooms, get_courses, get_students_groups, get_teachers
 from timetable_ga.models import Classroom, Course, Teacher
 
 mock_classrooms_data = [
@@ -194,3 +194,61 @@ def test_fetching_courses_validation_error(mock_get):
     courses = get_courses()
 
     assert courses == []
+
+
+@patch("requests.get")
+def test_fetching_students_groups_success(mock_get):
+    mock_response = MagicMock()
+    mock_response.json.return_value = [
+        {"id": "group_1", "name": "Calculus I.", "number_of_students": 30},
+        {"id": "group_2", "name": "Programming I.", "number_of_students": 25},
+    ]
+    mock_response.raise_for_status = MagicMock()
+    mock_get.return_value = mock_response
+
+    groups = get_students_groups()
+    assert len(groups) == 2
+    assert groups[0].backend_id == "group_1"
+    assert groups[0].name == "Calculus I."
+    assert groups[0].number_of_students == 30
+    assert groups[1].backend_id == "group_2"
+    assert groups[1].name == "Programming I."
+    assert groups[1].number_of_students == 25
+
+
+@patch("requests.get")
+@patch("builtins.print")
+def test_fetching_students_groups_api_error(mock_print, mock_get):
+    mock_response = MagicMock()
+    mock_response.raise_for_status.side_effect = requests.exceptions.RequestException("API error")
+    mock_get.return_value = mock_response
+
+    groups = get_students_groups()
+
+    assert groups == []
+    mock_print.assert_any_call("Request error occurred: API error")
+
+
+@patch("builtins.open")
+@patch("requests.get")
+def test_fetching_students_groups_from_dummy(mock_get, mock_open):
+    mock_open.return_value.__enter__.return_value.read.return_value = '{"groups": [{"id": "group_1", "name": "Calculus I.", "size": 30}, {"id": "group_2", "name": "Programming I.", "size": 25}]}'  # noqa: E501
+
+    groups = get_students_groups(from_dummy=True)
+
+    assert len(groups) == 2
+    assert groups[0].backend_id == "group_1"
+    assert groups[0].name == "Calculus I."
+    assert groups[0].number_of_students == 30
+    assert groups[1].backend_id == "group_2"
+    assert groups[1].name == "Programming I."
+    assert groups[1].number_of_students == 25
+
+
+@patch("builtins.open", side_effect=FileNotFoundError("Dummy data file not found"))
+@patch("requests.get")
+def test_fetching_students_groups_dummy_file_error(mock_get, mock_open):
+    try:
+        get_students_groups(from_dummy=True)
+    except FileNotFoundError as e:
+        assert str(e) == "Dummy data file not found"

@@ -117,20 +117,23 @@ def get_students_groups(from_dummy: bool = False) -> List[StudentsGroup]:
         response.raise_for_status()
 
         data = response.json()
-        student_groups = [
-            StudentsGroup(
-                backend_id=item["id"],
-                name=item["name"],
-                number_of_students=item["number_of_students"],
+        student_groups = []
+
+        for item in data:
+            if "name" not in item or "number_of_students" not in item:
+                raise ValueError(f"Missing required fields in student group: {item}")
+            student_groups.append(
+                StudentsGroup(
+                    backend_id=item["id"],
+                    name=item["name"],
+                    number_of_students=item["number_of_students"],
+                )
             )
-            for item in data
-        ]
         return student_groups
 
-    except ValidationError as e:
-        print(f"Validation error occurred: {e.json()}")
+    except ValueError as e:
+        print(f"ValueError occurred: {e}")
         return []
-
     except requests.exceptions.RequestException as e:
         print(f"Request error occurred: {e}")
         return []
