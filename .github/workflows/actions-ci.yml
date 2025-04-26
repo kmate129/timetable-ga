@@ -28,7 +28,7 @@ jobs:
 
     - name: Run tests
       run: |
-        poetry run pytest
+        PYTHONPATH=. poetry run pytest
 
   lint:
     runs-on: ubuntu-latest
