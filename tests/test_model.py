@@ -2,7 +2,7 @@
 
 import pytest
 
-from timetable_ga.models import Classroom, Course, InternalModel, Teacher
+from timetable_ga.models import Classroom, Course, InternalModel, StudentsGroup, Teacher
 
 
 @pytest.fixture(autouse=True)
@@ -11,6 +11,7 @@ def reset_id_counter():
     InternalModel.restart_id_counter()
     Course.restart_id_counter()
     Teacher.restart_id_counter()
+    StudentsGroup.restart_id_counter()
 
 
 def test_internal_model_auto_increment_id():
@@ -144,6 +145,60 @@ def test_teacher_inequality_by_id():
     teacher1 = Teacher(backend_id="backend_teacher_9", name="Feynman")
     teacher2 = Teacher(backend_id="backend_teacher_10", name="Dirac")
     assert teacher1 != teacher2
+
+
+def test_studentsgroup_creation_defaults():
+    group = StudentsGroup(backend_id="backend_group_1", name="Group A", number_of_students=30)
+    assert group.id == 0
+    assert group.backend_id == "backend_group_1"
+    assert group.name == "Group A"
+    assert group.number_of_students == 30
+    assert group.course_classes == []
+
+
+def test_studentsgroup_get_name():
+    group = StudentsGroup(backend_id="backend_group_2", name="Group B", number_of_students=25)
+    assert group.get_name() == "Group B"
+
+
+def test_studentsgroup_get_number_of_students():
+    group = StudentsGroup(backend_id="backend_group_3", name="Group C", number_of_students=20)
+    assert group.get_number_of_students() == 20
+
+
+def test_studentsgroup_add_class():
+    group = StudentsGroup(backend_id="backend_group_4", name="Group D", number_of_students=28)
+    group.add_class("Calculus I.")
+    group.add_class("Programming I.")
+    assert group.course_classes == ["Calculus I.", "Programming I."]
+
+
+def test_studentsgroup_get_course_classes():
+    group = StudentsGroup(backend_id="backend_group_5", name="Group E", number_of_students=18)
+    group.add_class("Calculus I.")
+    classes = group.get_course_classes()
+    assert classes == ["Calculus I."]
+
+
+def test_multiple_studentsgroups_auto_increment_ids():
+    group1 = StudentsGroup(backend_id="backend_group_6", name="Group F", number_of_students=22)
+    group2 = StudentsGroup(backend_id="backend_group_7", name="Group G", number_of_students=24)
+    assert group1.id == 0
+    assert group2.id == 1
+
+
+def test_studentsgroup_equality_by_id():
+    group1 = StudentsGroup(backend_id="backend_group_8", name="Group H", number_of_students=26)
+    group2 = StudentsGroup(
+        id=group1.id, backend_id="backend_group_9", name="Group I", number_of_students=27
+    )
+    assert group1 == group2
+
+
+def test_studentsgroup_inequality_by_id():
+    group1 = StudentsGroup(backend_id="backend_group_10", name="Group J", number_of_students=30)
+    group2 = StudentsGroup(backend_id="backend_group_11", name="Group K", number_of_students=32)
+    assert group1 != group2
 
 
 def test_classroom_id_reset():
