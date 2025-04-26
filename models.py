@@ -6,6 +6,10 @@ from pydantic import BaseModel
 
 
 class InternalModel(BaseModel):
+    """
+    Base model for all internal models.
+    """
+
     id: int
     backend_id: str
 
@@ -44,6 +48,9 @@ class InternalModel(BaseModel):
 
 
 class Course(InternalModel):
+    """
+    Model representing a course."""
+
     name: str
 
     def get_name(self):
@@ -54,6 +61,10 @@ class Course(InternalModel):
 
 
 class Teacher(InternalModel):
+    """
+    Model representing a teacher.
+    """
+
     name: str
     lunch_break_needed: bool = False
     course_classes: List = []
@@ -78,6 +89,10 @@ class Teacher(InternalModel):
 
 
 class StudentsGroup(InternalModel):
+    """
+    Model representing a group of students.
+    """
+
     name: str
     number_of_students: int
     course_classes: List = []
@@ -108,6 +123,10 @@ class StudentsGroup(InternalModel):
 
 
 class CourseClass(InternalModel):
+    """
+    Model representing a course class.
+    """
+
     teacher: Teacher
     course: Course
     number_of_seats: int
@@ -119,6 +138,7 @@ class CourseClass(InternalModel):
         """
         Initialize the course class with a teacher, course, groups, lab requirement, and duration.
         """
+        super().__init__()
         self.teacher = teacher
         self.course = course
         self.number_of_seats = 0
@@ -189,6 +209,10 @@ class CourseClass(InternalModel):
 
 
 class Classroom(InternalModel):
+    """
+    Model representing a classroom.
+    """
+
     name: str
     is_lab: bool = False
     number_of_seats: int = 1000
