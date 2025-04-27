@@ -27,19 +27,11 @@ celery_app = Celery(
 app = FastAPI()
 
 
-@celery_app.task
-def long_running_task():
-    import time
-
-    time.sleep(60)
-    return "Task completed"
-
-
 @app.get("/")
 def read_root():
-    """GET endpoint that returns a simple JSON response."""
+    """GET endpoint that starts timetable generation."""
     try:
-        task = long_running_task.delay()
+        task = timetable_generation.delay()
     except Exception as e:
         return {"response": "error", "error": str(e)}
     return {"response": "ok", "task_id": task.id, "task_status": task.state}
@@ -47,6 +39,7 @@ def read_root():
 
 @app.get("/task-status/{task_id}")
 def task_status(task_id: str):
+    """GET endpoint to check the status of a Celery task."""
     task = AsyncResult(task_id, backend=celery_app.backend)
     if task.state == "PENDING":
         return {"status": "pending", "message": "Task is still waiting to be executed."}
@@ -60,7 +53,8 @@ def task_status(task_id: str):
         return {"status": task.state}
 
 
-def fetch_all_data():
+@celery_app.task
+def timetable_generation():
     restart_id_counters()
 
     classrooms = get_classrooms()  # noqa: F841
