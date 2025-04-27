@@ -1,3 +1,5 @@
+"""API module for fetching data from a backend service."""
+
 import json
 import os
 from typing import List
@@ -109,8 +111,8 @@ def get_students_groups(from_dummy: bool = False) -> List[StudentsGroup]:
             for group in json_data["groups"]
         ]
         return groups
-    else:
-        url = os.getenv("BACKEND_URL") + "/student-groups"
+
+    url = os.getenv("BACKEND_URL") + "/student-groups"
 
     try:
         response = requests.get(url, timeout=10)
@@ -166,8 +168,8 @@ def get_course_classes(
             for group in json_data["groups"]
         ]
         return course_classes
-    else:
-        url = os.getenv("BACKEND_URL") + "/courses"
+
+    url = os.getenv("BACKEND_URL") + "/courses"
 
     for course in courses:
         url += f"/{course.backend_id}"
