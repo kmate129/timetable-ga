@@ -247,7 +247,7 @@ def test_fetching_students_groups_api_error(mock_print, mock_get):
 
 @patch("builtins.open")
 @patch("requests.get")
-def test_fetching_students_groups_from_dummy(mock_get, mock_open):
+def test_fetching_students_groups_from_dummy(_mock_get, mock_open):
     """Test fetching students groups from dummy data."""
     mock_open.return_value.__enter__.return_value.read.return_value = '{"groups": [{"id": "group_1", "name": "Calculus I.", "size": 30}, {"id": "group_2", "name": "Programming I.", "size": 25}]}'  # noqa: E501
 
@@ -264,7 +264,7 @@ def test_fetching_students_groups_from_dummy(mock_get, mock_open):
 
 @patch("builtins.open", side_effect=FileNotFoundError("Dummy data file not found"))
 @patch("requests.get")
-def test_fetching_students_groups_dummy_file_error(mock_get, mock_open):
+def test_fetching_students_groups_dummy_file_error(_mock_get, _mock_open):
     """Test fetching students groups from dummy data with file not found error."""
     try:
         get_students_groups(from_dummy=True)
