@@ -1,3 +1,5 @@
+"""Unit tests for API data fetching functions."""
+
 from unittest.mock import PropertyMock, patch
 
 from celery.result import AsyncResult
@@ -10,6 +12,7 @@ client = TestClient(app)
 
 @patch("timetable_ga.main.timetable_generation.delay")
 def test_read_root(mock_timetable_generation):
+    """Test the root endpoint."""
     mock_timetable_generation.return_value.id = "mock_task_id"
     mock_timetable_generation.return_value.state = "PENDING"
 
@@ -28,6 +31,7 @@ def test_read_root(mock_timetable_generation):
 @patch.object(AsyncResult, "info", new_callable=PropertyMock)
 @patch.object(AsyncResult, "result", new_callable=PropertyMock)
 def test_task_status(mock_result, mock_info, mock_state):
+    """Test the task status endpoint."""
     mock_state.return_value = "PENDING"
     response = client.get("/task-status/mock_task_id")
     assert response.status_code == 200

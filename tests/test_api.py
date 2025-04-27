@@ -1,3 +1,5 @@
+"""Unit tests for API data fetching functions."""
+
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -86,17 +88,17 @@ def test_fetching_classrooms(mock_get):
 
     assert len(classrooms) == len(mock_classrooms_data)
 
-    id = 0
+    id_ = 0
     for classroom in classrooms:
         assert isinstance(classroom, Classroom)
         assert isinstance(classroom.id, int)
-        assert classroom.id == id
+        assert classroom.id == id_
         assert isinstance(classroom.name, str)
         assert len(classroom.name) > 0
         assert isinstance(classroom.is_lab, bool)
         assert isinstance(classroom.number_of_seats, int)
 
-        id += 1
+        id_ += 1
 
 
 @patch("requests.get")
