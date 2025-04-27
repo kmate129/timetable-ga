@@ -249,7 +249,12 @@ def test_fetching_students_groups_api_error(mock_print, mock_get):
 @patch("requests.get")
 def test_fetching_students_groups_from_dummy(_mock_get, mock_open):
     """Test fetching students groups from dummy data."""
-    mock_open.return_value.__enter__.return_value.read.return_value = '{"groups": [{"id": "group_1", "name": "Calculus I.", "size": 30}, {"id": "group_2", "name": "Programming I.", "size": 25}]}'  # noqa: E501
+    mock_open.return_value.__enter__.return_value.read.return_value = (
+        '{"groups": ['
+        '{"id": "group_1", "name": "Calculus I.", "size": 30}, '
+        '{"id": "group_2", "name": "Programming I.", "size": 25}'
+        "]}"
+    )
 
     groups = get_students_groups(from_dummy=True)
 
