@@ -136,11 +136,11 @@ class CourseClass(InternalModel):
 
     def __init__(
         self,
-        teacher,
-        course,
-        groups,
-        is_lab_required,
-        duration,
+        teacher=None,
+        course=None,
+        groups=None,
+        is_lab_required=False,
+        duration=1,
         backend_id=None,
         name=None,
         number_of_students=None,
