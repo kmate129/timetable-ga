@@ -1,3 +1,6 @@
+"""
+Test the utils module."""
+
 from unittest.mock import patch
 
 from timetable_ga.utils import restart_id_counters

@@ -108,7 +108,7 @@ def test_teacher_creation_defaults():
     assert teacher.backend_id == "backend_teacher_1"
     assert teacher.name == "John Doe"
     assert teacher.lunch_break_needed is False
-    assert teacher.course_classes == []
+    assert not teacher.course_classes
 
 
 def test_teacher_get_name():
@@ -162,7 +162,7 @@ def test_studentsgroup_creation_defaults():
     assert group.backend_id == "backend_group_1"
     assert group.name == "Group A"
     assert group.number_of_students == 30
-    assert group.course_classes == []
+    assert not group.course_classes
 
 
 def test_studentsgroup_get_name():
