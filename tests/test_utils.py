@@ -15,6 +15,7 @@ def test_restart_id_counters(
     mock_teacher_restart,
     mock_classroom_restart,
 ):
+    """Test the restart_id_counters function."""
     restart_id_counters()
 
     mock_classroom_restart.assert_called_once()

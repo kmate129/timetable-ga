@@ -102,6 +102,7 @@ def test_course_inequality_by_id():
 
 
 def test_teacher_creation_defaults():
+    """Test if Teacher can be created with default values."""
     teacher = Teacher(backend_id="backend_teacher_1", name="John Doe")
     assert teacher.id == 0
     assert teacher.backend_id == "backend_teacher_1"
@@ -111,11 +112,13 @@ def test_teacher_creation_defaults():
 
 
 def test_teacher_get_name():
+    """Test if Teacher returns the correct name."""
     teacher = Teacher(backend_id="backend_teacher_2", name="Jane Smith")
     assert teacher.get_name() == "Jane Smith"
 
 
 def test_teacher_add_course_class():
+    """Test if Teacher can add a course class."""
     teacher = Teacher(backend_id="backend_teacher_3", name="Alan Turing")
     teacher.add_course_class("Calculus I.")
     teacher.add_course_class("Programming I.")
@@ -123,6 +126,7 @@ def test_teacher_add_course_class():
 
 
 def test_teacher_get_course_classes():
+    """Test if Teacher can get the list of course classes."""
     teacher = Teacher(backend_id="backend_teacher_4", name="Ada Lovelace")
     teacher.add_course_class("Programming I.")
     classes = teacher.get_course_classes()
@@ -130,6 +134,7 @@ def test_teacher_get_course_classes():
 
 
 def test_multiple_teachers_auto_increment_ids():
+    """Test if multiple Teacher objects auto-increment their IDs."""
     teacher1 = Teacher(backend_id="backend_teacher_5", name="Einstein")
     teacher2 = Teacher(backend_id="backend_teacher_6", name="Newton")
     assert teacher1.id == 0
@@ -137,18 +142,21 @@ def test_multiple_teachers_auto_increment_ids():
 
 
 def test_teacher_equality_by_id():
+    """Test if two Teacher objects with the same ID are equal."""
     teacher1 = Teacher(backend_id="backend_teacher_7", name="Galileo")
     teacher2 = Teacher(id=teacher1.id, backend_id="backend_teacher_8", name="Kepler")
     assert teacher1 == teacher2
 
 
 def test_teacher_inequality_by_id():
+    """Test if two Teacher objects with different IDs are not equal."""
     teacher1 = Teacher(backend_id="backend_teacher_9", name="Feynman")
     teacher2 = Teacher(backend_id="backend_teacher_10", name="Dirac")
     assert teacher1 != teacher2
 
 
 def test_studentsgroup_creation_defaults():
+    """Test if StudentsGroup can be created with default values."""
     group = StudentsGroup(backend_id="backend_group_1", name="Group A", number_of_students=30)
     assert group.id == 0
     assert group.backend_id == "backend_group_1"
@@ -158,16 +166,19 @@ def test_studentsgroup_creation_defaults():
 
 
 def test_studentsgroup_get_name():
+    """Test if StudentsGroup returns the correct name."""
     group = StudentsGroup(backend_id="backend_group_2", name="Group B", number_of_students=25)
     assert group.get_name() == "Group B"
 
 
 def test_studentsgroup_get_number_of_students():
+    """Test if StudentsGroup returns the correct number of students."""
     group = StudentsGroup(backend_id="backend_group_3", name="Group C", number_of_students=20)
     assert group.get_number_of_students() == 20
 
 
 def test_studentsgroup_add_class():
+    """Test if StudentsGroup can add a course class."""
     group = StudentsGroup(backend_id="backend_group_4", name="Group D", number_of_students=28)
     group.add_class("Calculus I.")
     group.add_class("Programming I.")
@@ -175,6 +186,7 @@ def test_studentsgroup_add_class():
 
 
 def test_studentsgroup_get_course_classes():
+    """Test if StudentsGroup can get the list of course classes."""
     group = StudentsGroup(backend_id="backend_group_5", name="Group E", number_of_students=18)
     group.add_class("Calculus I.")
     classes = group.get_course_classes()
@@ -182,6 +194,7 @@ def test_studentsgroup_get_course_classes():
 
 
 def test_multiple_studentsgroups_auto_increment_ids():
+    """Test if multiple StudentsGroup objects auto-increment their IDs."""
     group1 = StudentsGroup(backend_id="backend_group_6", name="Group F", number_of_students=22)
     group2 = StudentsGroup(backend_id="backend_group_7", name="Group G", number_of_students=24)
     assert group1.id == 0
@@ -189,6 +202,7 @@ def test_multiple_studentsgroups_auto_increment_ids():
 
 
 def test_studentsgroup_equality_by_id():
+    """Test if two StudentsGroup objects with the same ID are equal."""
     group1 = StudentsGroup(backend_id="backend_group_8", name="Group H", number_of_students=26)
     group2 = StudentsGroup(
         id=group1.id, backend_id="backend_group_9", name="Group I", number_of_students=27
@@ -197,12 +211,14 @@ def test_studentsgroup_equality_by_id():
 
 
 def test_studentsgroup_inequality_by_id():
+    """Test if two StudentsGroup objects with different IDs are not equal."""
     group1 = StudentsGroup(backend_id="backend_group_10", name="Group J", number_of_students=30)
     group2 = StudentsGroup(backend_id="backend_group_11", name="Group K", number_of_students=32)
     assert group1 != group2
 
 
 def test_classroom_creation_defaults():
+    """Test if Classroom can be created with default values."""
     classroom = Classroom(backend_id="backend_classroom_1", name="Room A")
     assert classroom.id == 0
     assert classroom.backend_id == "backend_classroom_1"
@@ -212,31 +228,37 @@ def test_classroom_creation_defaults():
 
 
 def test_classroom_get_name():
+    """Test if Classroom returns the correct name."""
     classroom = Classroom(backend_id="backend_classroom_2", name="Room B")
     assert classroom.get_name() == "Room B"
 
 
 def test_classroom_get_is_lab_default():
+    """Test if Classroom returns the correct lab status by default."""
     classroom = Classroom(backend_id="backend_classroom_3", name="Room C")
     assert classroom.get_is_lab() is False
 
 
 def test_classroom_get_is_lab_set_true():
+    """Test if Classroom returns the correct lab status when set to True."""
     classroom = Classroom(backend_id="backend_classroom_4", name="Lab 1", is_lab=True)
     assert classroom.get_is_lab() is True
 
 
 def test_classroom_get_number_of_seats_default():
+    """Test if Classroom returns the correct number of seats by default."""
     classroom = Classroom(backend_id="backend_classroom_5", name="Room D")
     assert classroom.get_number_of_seats() == 1000
 
 
 def test_classroom_get_number_of_seats_custom():
+    """Test if Classroom returns the correct number of seats when set to a custom value."""
     classroom = Classroom(backend_id="backend_classroom_6", name="Small Room", number_of_seats=30)
     assert classroom.get_number_of_seats() == 30
 
 
 def test_multiple_classrooms_auto_increment_ids():
+    """Test if multiple Classroom objects auto-increment their IDs."""
     classroom1 = Classroom(backend_id="backend_classroom_7", name="Room E")
     classroom2 = Classroom(backend_id="backend_classroom_8", name="Room F")
     assert classroom1.id == 0
@@ -244,12 +266,14 @@ def test_multiple_classrooms_auto_increment_ids():
 
 
 def test_classroom_equality_by_id():
+    """Test if two Classroom objects with the same ID are equal."""
     classroom1 = Classroom(backend_id="backend_classroom_9", name="Room G")
     classroom2 = Classroom(id=classroom1.id, backend_id="backend_classroom_10", name="Room H")
     assert classroom1 == classroom2
 
 
 def test_classroom_inequality_by_id():
+    """Test if two Classroom objects with different IDs are not equal."""
     classroom1 = Classroom(backend_id="backend_classroom_11", name="Room I")
     classroom2 = Classroom(backend_id="backend_classroom_12", name="Room J")
     assert classroom1 != classroom2

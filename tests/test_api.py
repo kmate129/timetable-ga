@@ -21,6 +21,7 @@ mock_teachers_data = [
 
 @patch("requests.get")
 def test_fetching_classrooms_api_error(mock_get):
+    """Test fetching classrooms with API error."""
     mock_get.side_effect = requests.exceptions.RequestException("Connection failed")
 
     classrooms = get_classrooms()
@@ -30,6 +31,7 @@ def test_fetching_classrooms_api_error(mock_get):
 
 @patch("requests.get")
 def test_fetching_classrooms_empty_list(mock_get):
+    """Test fetching classrooms with an empty list."""
     mock_response = MagicMock()
     mock_response.json.return_value = []
     mock_response.raise_for_status = MagicMock()
@@ -42,6 +44,7 @@ def test_fetching_classrooms_empty_list(mock_get):
 
 @patch("requests.get")
 def test_fetching_classrooms_invalid_data(mock_get):
+    """Test fetching classrooms with invalid data."""
     invalid_data = [
         {"id": "some-id"},
     ]
@@ -61,6 +64,7 @@ def test_fetching_classrooms_invalid_data(mock_get):
 
 @patch("requests.get")
 def test_fetching_classrooms_server_error(mock_get):
+    """Test fetching classrooms with server error."""
     mock_response = MagicMock()
     mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("500 Server Error")
     mock_get.return_value = mock_response
@@ -72,6 +76,7 @@ def test_fetching_classrooms_server_error(mock_get):
 
 @patch("requests.get")
 def test_fetching_classrooms(mock_get):
+    """Test fetching classrooms with valid data."""
     mock_response = MagicMock()
     mock_response.json.return_value = mock_classrooms_data
     mock_response.raise_for_status = MagicMock()
@@ -96,6 +101,7 @@ def test_fetching_classrooms(mock_get):
 
 @patch("requests.get")
 def test_fetching_teachers_api_error(mock_get):
+    """Test fetching teachers with API error."""
     mock_get.side_effect = requests.exceptions.RequestException("Connection failed")
 
     teachers = get_teachers()
@@ -105,6 +111,7 @@ def test_fetching_teachers_api_error(mock_get):
 
 @patch("requests.get")
 def test_fetching_teachers_server_error(mock_get):
+    """Test fetching teachers with server error."""
     mock_response = MagicMock()
     mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("500 Server Error")
     mock_get.return_value = mock_response
@@ -116,6 +123,7 @@ def test_fetching_teachers_server_error(mock_get):
 
 @patch("requests.get")
 def test_fetching_teachers_invalid_data(mock_get):
+    """Test fetching teachers with invalid data."""
     mock_response = MagicMock()
     mock_response.json.return_value = [
         {"id": "teacher_1", "name": "Ms. Brown"},
@@ -130,6 +138,7 @@ def test_fetching_teachers_invalid_data(mock_get):
 
 @patch("requests.get")
 def test_fetching_teachers(mock_get):
+    """Test fetching teachers with valid data."""
     mock_response = MagicMock()
     mock_response.json.return_value = mock_teachers_data
     mock_response.raise_for_status = MagicMock()
@@ -149,6 +158,7 @@ def test_fetching_teachers(mock_get):
 
 @patch("requests.get")
 def test_fetching_courses_success(mock_get):
+    """Test fetching courses with valid data."""
     mock_response = MagicMock()
     mock_response.json.return_value = [
         {"id": "course_1", "name": "Calculus I."},
@@ -170,6 +180,7 @@ def test_fetching_courses_success(mock_get):
 
 @patch("requests.get")
 def test_fetching_courses_request_exception(mock_get):
+    """Test fetching courses with request exception."""
     mock_response = MagicMock()
     mock_response.raise_for_status.side_effect = requests.exceptions.RequestException(
         "Connection failed"
@@ -183,6 +194,7 @@ def test_fetching_courses_request_exception(mock_get):
 
 @patch("requests.get")
 def test_fetching_courses_validation_error(mock_get):
+    """Test fetching courses with validation error."""
     mock_response = MagicMock()
     mock_response.json.return_value = [
         {"id": "course_1", "name": "Calculus I."},
@@ -198,6 +210,7 @@ def test_fetching_courses_validation_error(mock_get):
 
 @patch("requests.get")
 def test_fetching_students_groups_success(mock_get):
+    """Test fetching students groups with valid data."""
     mock_response = MagicMock()
     mock_response.json.return_value = [
         {"id": "group_1", "name": "Calculus I.", "number_of_students": 30},
@@ -219,6 +232,7 @@ def test_fetching_students_groups_success(mock_get):
 @patch("requests.get")
 @patch("builtins.print")
 def test_fetching_students_groups_api_error(mock_print, mock_get):
+    """Test fetching students groups with API error."""
     mock_response = MagicMock()
     mock_response.raise_for_status.side_effect = requests.exceptions.RequestException("API error")
     mock_get.return_value = mock_response
@@ -232,6 +246,7 @@ def test_fetching_students_groups_api_error(mock_print, mock_get):
 @patch("builtins.open")
 @patch("requests.get")
 def test_fetching_students_groups_from_dummy(mock_get, mock_open):
+    """Test fetching students groups from dummy data."""
     mock_open.return_value.__enter__.return_value.read.return_value = '{"groups": [{"id": "group_1", "name": "Calculus I.", "size": 30}, {"id": "group_2", "name": "Programming I.", "size": 25}]}'  # noqa: E501
 
     groups = get_students_groups(from_dummy=True)
@@ -248,6 +263,7 @@ def test_fetching_students_groups_from_dummy(mock_get, mock_open):
 @patch("builtins.open", side_effect=FileNotFoundError("Dummy data file not found"))
 @patch("requests.get")
 def test_fetching_students_groups_dummy_file_error(mock_get, mock_open):
+    """Test fetching students groups from dummy data with file not found error."""
     try:
         get_students_groups(from_dummy=True)
     except FileNotFoundError as e:
