@@ -106,7 +106,7 @@ def test_fetching_teachers_api_error(mock_get):
 
     teachers = get_teachers()
 
-    assert teachers == []
+    assert not teachers
 
 
 @patch("requests.get")
@@ -118,7 +118,7 @@ def test_fetching_teachers_server_error(mock_get):
 
     teachers = get_teachers()
 
-    assert teachers == []
+    assert not teachers
 
 
 @patch("requests.get")
@@ -189,7 +189,7 @@ def test_fetching_courses_request_exception(mock_get):
 
     courses = get_courses()
 
-    assert courses == []
+    assert not courses
 
 
 @patch("requests.get")
@@ -205,7 +205,7 @@ def test_fetching_courses_validation_error(mock_get):
 
     courses = get_courses()
 
-    assert courses == []
+    assert not courses
 
 
 @patch("requests.get")
