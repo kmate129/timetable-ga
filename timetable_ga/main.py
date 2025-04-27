@@ -43,18 +43,18 @@ def task_status(task_id: str):
     task = AsyncResult(task_id, backend=celery_app.backend)
     if task.state == "PENDING":
         return {"status": "pending", "message": "Task is still waiting to be executed."}
-    elif task.state == "FAILURE":
+    if task.state == "FAILURE":
         return {"status": "failed", "error": str(task.info)}
-    elif task.state == "SUCCESS":
+    if task.state == "SUCCESS":
         return {"status": "success", "result": task.result}
-    elif task.state == "REVOKED":
+    if task.state == "REVOKED":
         return {"status": "revoked", "message": "Task was revoked."}
-    else:
-        return {"status": task.state}
+    return {"status": task.state}
 
 
 @celery_app.task
 def timetable_generation():
+    """Celery task to generate the timetable."""
     restart_id_counters()
 
     classrooms = get_classrooms()  # noqa: F841

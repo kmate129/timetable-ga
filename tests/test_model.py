@@ -38,7 +38,7 @@ def test_internal_model_get_id_and_backend_id():
 
 def test_internal_model_restart_id_counter():
     """Test if the ID counter can be restarted."""
-    obj1 = InternalModel(backend_id="backend_a")  # noqa: F841
+    _ = InternalModel(backend_id="backend_a")
     InternalModel.restart_id_counter()
     obj2 = InternalModel(backend_id="backend_b")
     assert obj2.id == 0
