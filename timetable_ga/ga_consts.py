@@ -1,3 +1,5 @@
+"""Constants for the genetic algorithm"""
+
 # Number of working hours per day
 DAY_HOURS = 12
 

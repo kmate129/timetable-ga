@@ -15,7 +15,7 @@ def get_classrooms() -> List[Classroom]:
     url = "http://localhost:3080/classrooms"
 
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()
 
         data = response.json()
@@ -35,7 +35,7 @@ def get_teachers() -> List[Teacher]:
     url = "http://localhost:3080/users"
 
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()
 
         data = response.json()
@@ -65,7 +65,7 @@ def get_courses() -> List[Course]:
     url = "http://localhost:3080/courses"
 
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()
 
         data = response.json()
@@ -113,7 +113,7 @@ def get_students_groups(from_dummy: bool = False) -> List[StudentsGroup]:
         url = os.getenv("BACKEND_URL") + "/student-groups"
 
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()
 
         data = response.json()
@@ -172,7 +172,7 @@ def get_course_classes(
     for course in courses:
         url += f"/{course.backend_id}"
         try:
-            response = requests.get(url)
+            response = requests.get(url, timeout=10)
             response.raise_for_status()
 
             data = response.json()
@@ -192,7 +192,7 @@ def get_course_classes(
             return []
 
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()
 
         data = response.json()
