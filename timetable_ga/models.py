@@ -134,11 +134,21 @@ class CourseClass(InternalModel):
     duration: int
     groups: List[StudentsGroup]
 
-    def __init__(self, teacher, course, groups, is_lab_required, duration):
+    def __init__(
+        self,
+        teacher,
+        course,
+        groups,
+        is_lab_required,
+        duration,
+        backend_id=None,
+        name=None,
+        number_of_students=None,
+    ):
         """
         Initialize the course class with a teacher, course, groups, lab requirement, and duration.
         """
-        super().__init__()
+        super().__init__(backend_id=backend_id, name=name, number_of_students=number_of_students)
         self.teacher = teacher
         self.course = course
         self.number_of_seats = 0
