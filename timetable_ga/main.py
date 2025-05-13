@@ -15,6 +15,7 @@ from timetable_ga.api import (
     get_students_groups,
     get_teachers,
 )
+from timetable_ga.models import Algorithm, Configuration, Schedule
 from timetable_ga.utils import restart_id_counters
 
 load_dotenv()
@@ -57,8 +58,22 @@ def timetable_generation():
     """Celery task to generate the timetable."""
     restart_id_counters()
 
-    classrooms = get_classrooms()  # noqa: F841
-    teachers = get_teachers()  # noqa: F841
-    courses = get_courses()  # noqa: F841
-    student_groups = get_students_groups(from_dummy=True)  # noqa: F841
-    course_class = get_course_classes(from_dummy=True)  # noqa: F841
+    classrooms = get_classrooms()
+    teachers = get_teachers()
+    courses = get_courses()
+    student_groups = get_students_groups(from_dummy=True)
+    course_class = get_course_classes(from_dummy=True)
+
+    configuration = Configuration(  # noqa: F841
+        classrooms=classrooms,
+        teachers=teachers,
+        courses=courses,
+        student_groups=student_groups,
+        course_class=course_class,
+    )
+
+    prototype = Schedule(2, 2, 80, 3)
+    instance = Algorithm(100, 8, 5, prototype)
+
+    global best_chromosome
+    bestChromosome = instance.Start()  # noqa: F841

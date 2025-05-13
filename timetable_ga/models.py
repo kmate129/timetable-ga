@@ -630,7 +630,7 @@ class Algorithm:
 
     def clear_best(self):
         """Clears the best chromosomes list."""
-        for i in range(len(self.best_flags), -1, -1):
+        for i in range(len(self.best_flags)):
             self.best_flags[i] = False
 
         self.current_best_size = 0
